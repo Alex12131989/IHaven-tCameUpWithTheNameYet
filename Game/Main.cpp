@@ -2,7 +2,7 @@
 
 int main()
 {
-	Game* game = new Game();
-	game->MainLoop();
-	return 0;
+    Game* game = new Game();
+    game->MainLoop();
+    return 0;
 }

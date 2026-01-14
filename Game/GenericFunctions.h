@@ -2,20 +2,91 @@
 #include <stdexcept>
 #include <cmath>
 
+#include "CONSTANTS.h"
+
 template <typename T>
-int Int(T num, int round_option)
+int Int(T num, unsigned int round_option)
 {
-	switch (round_option)
-	{
-	case 0:
-		return static_cast<int>(num);
-	case 1:
-		return static_cast<int>(std::round(num));
-	case 2:
-		return static_cast<int>(std::floor(num));
-	case 3:
-		return static_cast<int>(std::ceil(num));
-	default:
-		throw std::invalid_argument("Wrong rounding option");
-	}
+    switch (round_option)
+    {
+    case CAST:
+	    return static_cast<int>(num);
+    case ROUND:
+	    return static_cast<int>(std::round(num));
+    case FLOOR:
+	    return static_cast<int>(std::floor(num));
+    case CEIL:
+	    return static_cast<int>(std::ceil(num));
+    default:
+	    throw std::invalid_argument("Wrong rounding option");
+    }
+}
+
+Color static EditColor(Color ogColor, float multiplicantR, float multiplicantG, float multiplicantB, float multiplicantA)
+{
+    return
+    { 
+        static_cast<unsigned char>(ogColor.r*multiplicantR), 
+        static_cast<unsigned char>(ogColor.g*multiplicantG), 
+        static_cast<unsigned char>(ogColor.b*multiplicantB), 
+        static_cast<unsigned char>(ogColor.a*multiplicantA)
+    };
+}
+
+Color static EditColor(Color ogColor, float multiplicant)
+{
+    return
+    {
+         static_cast<unsigned char>(ogColor.r*multiplicant),
+         static_cast<unsigned char>(ogColor.g*multiplicant),
+         static_cast<unsigned char>(ogColor.b*multiplicant),
+         ogColor.a
+    };
+}
+
+Color static ChangeColorOpacity(Color ogColor, float opacity)
+{
+    if ((opacity <= 1) && (opacity >= 0))
+        return { ogColor.r, ogColor.g, ogColor.b, static_cast<unsigned char>(ogColor.a*opacity) };
+    else
+        throw new std::invalid_argument("Invalid opacity value");
+}
+
+Image static LoadSprite(std::string address, Vector2 size)
+{
+    if ((size.x == -1) && (size.y == -1))
+        return LoadImage(address.data());
+    else
+    {
+        Image sprite = LoadImage(address.data());
+        if (size.x == -1)
+            ImageResize(&sprite, sprite.height, Int(size.y, FLOOR));
+        else if (size.y == -1)
+            ImageResize(&sprite, Int(size.x, FLOOR), sprite.width);
+        else
+            ImageResize(&sprite, Int(size.x, FLOOR), Int(size.y, FLOOR));
+        return sprite;
+    }
+}
+
+std::vector<Image> static DecomposeSprite(Image sprite, Vector2 singleImageSize)
+{
+    std::vector<Image> frames;
+    for (float i = 0; i < sprite.height; i += singleImageSize.y)
+        for (float j = 0; j < sprite.width; j += singleImageSize.x)
+        {
+            Image frame = ImageFromImage(sprite, { static_cast<float>(i), static_cast<float>(j), singleImageSize.x, singleImageSize.y });
+            frames.push_back(frame);
+        }
+    return frames;
+}
+
+std::vector<Texture2D> static GetTextures(std::string address, Vector2 size, Vector2 induvidualTextureSize)
+{
+    Image sprite = LoadSprite(address, size);
+    std::vector<Image> frames = DecomposeSprite(sprite, induvidualTextureSize);
+    std::vector<Texture2D> textures;
+    for (Image frame : frames)
+        textures.push_back(LoadTextureFromImage(frame));
+    return textures;
 }
