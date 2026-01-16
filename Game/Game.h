@@ -5,41 +5,44 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "CONSTANTS.h"
+#include "KeysBound.h"
 #include "GenericFunctions.h"
+#include "Player.h"
+#include "Skeleton.h"
+#include "Object.h"
+#include "HUD.h"
 
 class Game
 {
 public:
+    Game();
     bool MainLoop();
     
 private:
-    //sizes
-    unsigned int screenWidth = 640;
-    unsigned int screenHeight = 360;
-    static constexpr float VmenuGapPerc = 0.05f;
-    static constexpr float VmenuOptionWPerc = 0.60f;
-    static constexpr float VmenuOptionHPerc = 0.10f;
-    static constexpr float HmenuGapPerc = 0.15f;
-    static constexpr float HmenuWidth = 0.30f;
-    static constexpr float HmenuHeight = 0.50f;
-    static constexpr float HarrowWidth = 0.05f;
-    static constexpr float HarrowHeight = 0.10f;
-    static constexpr float HarrowMargin = 0.05f;
-    static constexpr unsigned int HarrowThickness = 5;
+    //size
+    Vector2 screen = { 640, 360 };
     
+    //items
+
+    //entities
+    Player *player;
+    HUD *_HUD;
+    std::vector<Skeleton*> enemies;
+    std::vector<Entity*> entities;
+    std::vector<Object*> objects;
+     
     //other values
     unsigned int FPS = 60;
-    unsigned int menuFontValue = 20;
-    unsigned int currentSelection = 0;
-    Color menuBackgroundColor = BLACK;
     
     std::vector<std::string> welcoming_options{"Load Alias", "Start New", "Settings", "Exit"};
     std::vector<Texture2D> temp_textures;
     
     //methods
-    void Menu(std::vector<std::string> options, std::vector<Image> textures, Color primaryColor, Color secondaryColor, Color inactiveColor, unsigned int orientation);
-    void DrawArrow(Vector2 topLeft, Vector2 sizes, unsigned int thickness, Color color, unsigned int orientation);
+    void CheckKeysPressed();
+    void OpenMenu(std::vector<std::string> options, std::vector<Image> textures, Color primaryColor, Color secondaryColor, Color inactiveColor, unsigned int orientation);
     void LoadTextures();
+    void LoadMap();
 };

@@ -1,13 +1,17 @@
 #pragma once
+//libraries
+#include <stdexcept>
+
 //operations
-#define	    CAST            131313000
-#define	    ROUND           131313001
-#define	    FLOOR           131313002
-#define	    CEIL            131313003
+#define	    CAST            0
+#define	    ROUND           1
+#define	    FLOOR           2
+#define	    CEIL            3
+
 //orientations
-#define	    LEFT            131313004
-#define	    RIGHT           131313005
-#define	    UPWARD          131313006
-#define	    DOWNWARD        131313007
-#define	    HORIZONTAL      131313008
-#define	    VERTICAL        131313009
+#define	    LEFTBOUND       4
+#define	    RIGHTBOUND      5
+#define	    UPWARD          6
+#define	    DOWNWARD        7
+#define	    HORIZONTAL      8
+#define	    VERTICAL        9

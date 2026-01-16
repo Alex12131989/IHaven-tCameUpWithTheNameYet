@@ -1,6 +1,6 @@
 #pragma once
-#include <stdexcept>
 #include <cmath>
+#include <vector>
 
 #include "CONSTANTS.h"
 
