@@ -1,15 +1,22 @@
 #pragma once
 #include <string>
+#include <chrono>
+#include <thread>
 
 #include "Entity.h"
 #include "CONSTANTS.h"
+#include "GenericFunctions.h"
 
 class Player : public Entity
 {
 public:
     Player(char faction);
     void SetFaction(char faction);
+    Rectangle GetBody() override;
+    Vector2 GetBodyCenter();
     void Spawn(Vector2 position) override;
+    void Cooldown(int timeInMilliseconds) override;
+    void Idle() override;
     void Attack() override;
     void Defend() override;
     void ChangeSpeed(float rate) override;
@@ -20,6 +27,7 @@ public:
     void Move(char direction) override;
     void Draw() override;
     void Die() override;
+
 
     //getters
     unsigned int Health() const { return hp; }
@@ -37,8 +45,12 @@ public:
 private:
     enum Factions 
     {
-        Tank,
-        Sourcerer
+        Spaith,      //Spathi - sword (greek)                    
+        Dorirni,    //Dory - spear (greek),  eirini - peace (greek)
+        Pulee,      //Pouli - bird (greek)
+        Farfall,    //Farfalla - butterfly (italian)
+        Kreceed,    //Crecida - high water (spanish)
+        Aphreich    // Apfel - apple (german), reich (rich)
     };
     unsigned int hp;
     unsigned int maxHp;
@@ -50,7 +62,11 @@ private:
     unsigned int rankExperiencePoint;
     char faction;
     float speed;
-    bool idle;
-    bool alive;
-    Rectangle body;
+    bool idle = true;
+    bool alive = true;
+    bool actionCooldown = false;
+    Rectangle body = { 0, 0, 0, 0 };
+
+    //temp
+    Color rectColor = YELLOW;
 };

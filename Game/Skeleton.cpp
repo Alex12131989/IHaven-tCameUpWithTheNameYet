@@ -11,6 +11,11 @@ Skeleton::Skeleton(unsigned int level)
     this->level = level;
 }
 
+Rectangle Skeleton::GetBody()
+{
+    return body;
+}
+
 void Skeleton::Spawn(Vector2 position)
 {
     body.x = position.x;
@@ -19,6 +24,16 @@ void Skeleton::Spawn(Vector2 position)
     //temp
     body.width = 25;
     body.height = 50;
+}
+
+void Skeleton::Cooldown(int timeInMilliseconds)
+{
+
+}
+
+void Skeleton::Idle()
+{
+
 }
 
 void Skeleton::Attack()

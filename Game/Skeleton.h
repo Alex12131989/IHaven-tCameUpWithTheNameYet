@@ -10,7 +10,10 @@ class Skeleton : public Entity
 public:
     Skeleton(Vector2 levelRange);
     Skeleton(unsigned int level);
+    Rectangle GetBody() override;
     void Spawn(Vector2 position) override;
+    void Cooldown(int timeInMilliseconds) override;
+    void Idle() override;
     void Attack() override;
     void Defend() override;
     void ChangeSpeed(float rate) override;

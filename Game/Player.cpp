@@ -9,7 +9,7 @@ void Player::SetFaction(char faction)
 {
     switch (faction)
     {
-    case Tank:
+    case Spaith:
         hp = 1000;
         maxHp = 1000;
         stamina = 100;
@@ -17,7 +17,7 @@ void Player::SetFaction(char faction)
         damagePoints = 50;
         speed = 2;
         break;
-    case Sourcerer:
+    case Farfall:
         hp = 200;
         maxHp = 200;
         stamina = 100;
@@ -42,6 +42,16 @@ void Player::DrainStamina()
 
 }
 
+Rectangle Player::GetBody()
+{
+    return body;
+}
+
+Vector2 Player::GetBodyCenter()
+{
+    return { body.x + body.width/2, body.y + body.height/2 };
+}
+
 void Player::Spawn(Vector2 position)
 {
     body.x = position.x;
@@ -52,24 +62,41 @@ void Player::Spawn(Vector2 position)
     body.height = 50;
 }
 
+void Player::Cooldown(int timeInMilliseconds)
+{
+    if (!timeInMilliseconds)
+        return;
+    if (timeInMilliseconds > 0)
+        std::this_thread::sleep_for(std::chrono::milliseconds(timeInMilliseconds));
+    else
+        throw new std::invalid_argument("Invalid time");
+}
+
+void Player::Idle()
+{
+    rectColor = YELLOW;
+}
+
 void Player::Attack()
 {
-
+    rectColor = BLACK;
 }
 
 void Player::Defend()
 {
-
+    rectColor = BLUE;
 }
 
 void Player::TakeDamage(int hp)
 {
-
+    this->hp -= hp;
+    rectColor = RED;
 }
 
 void Player::Heal(int hp) 
 {
-
+    this->hp += hp;
+    rectColor = GREEN;
 }
 
 void Player::Move(Vector2 movement)
@@ -101,10 +128,14 @@ void Player::Move(char direction)
 
 void Player::Draw() 
 {
-    DrawRectangleRec(body, GREEN);
+    if (alive)
+        DrawRectangleRec(body, rectColor);
+    else
+        DrawCircle(Int(body.x + body.width/2, 2), Int(body.y + body.height/2, 2), body.width/2, MAROON);
 }
 
 void Player::Die()
 {
-
+    alive = false;
+    rectColor = MAROON;
 }

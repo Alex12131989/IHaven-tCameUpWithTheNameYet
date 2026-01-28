@@ -1,38 +1,49 @@
 #include "Game.h"
+//#include <iostream>
 
 Game::Game()
 {
     player = new Player(0);
+    player->Spawn({400,100});
+    camera.target = player->GetBodyCenter();
+
+    camera.offset = { screen.x/2.0f, screen.y/2.0f };
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
+
     _HUD = new HUD(player, screen);
-    entities.push_back(player);
-    for (size_t i = 0; i < 5; ++i)
+    entities[0] = player;
+    ++entitiesRedering;
+    for (size_t i = 1; i <= 5; ++i)
     {
         auto enemy = new Skeleton(13);
-        enemies.push_back(enemy);
-        entities.push_back(enemy);
+        enemy->Spawn({(i + 1)*100.0f,200});
+        enemies[i] = enemy;
+        entities[i] = enemy;
+        ++entitiesRedering;
     }
 }
 
 bool Game::MainLoop()
 {
     InitWindow(Int(screen.x, FLOOR), Int(screen.y, FLOOR), "Title");
-    player->Spawn({400,100});
-    for(size_t i = 0; i < enemies.size(); ++i)
-        enemies[i]->Spawn({(i + 1)*100.0f,200});
 
     LoadTextures();
     SetTargetFPS(FPS);
 
     while (!WindowShouldClose())
     {
+        //Processing
         CheckKeysPressed();
+        CheckCollisions();
         //Drawing
         BeginDrawing();
-        ClearBackground(GRAY);
-        
-        for (auto entity : entities)
-            entity->Draw();
-        _HUD->Display();
+            ClearBackground(GRAY);
+            BeginMode2D(camera);
+                for (size_t i = 0; i < entitiesRedering; ++i)
+                    entities[i]->Draw();
+            EndMode2D();
+            _HUD->Display();
         EndDrawing();
     }
     CloseWindow();
@@ -51,12 +62,18 @@ void Game::CheckKeysPressed()
     else if (IsKeyDown(DOWN) || IsKeyDown(DOWN2)) player->Move(DOWNWARD);
     if (IsKeyDown(LEFT) || IsKeyDown(LEFT2)) player->Move(LEFTBOUND);
     else if (IsKeyDown(RIGHT) || IsKeyDown(RIGHT2)) player->Move(RIGHTBOUND);
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) player->Attack();
 
-
-
+    camera.target = player->GetBodyCenter();
+    
 
 
     if (changedPlayerSpeed) player->ChangeSpeed(static_cast<float>(sqrt(2)));
+}
+
+void Game::CheckCollisions()
+{
+    //if (player)
 }
 
 void Game::OpenMenu(std::vector<std::string> options, std::vector<Image> textures, Color primaryColor, Color secondaryColor, Color inactiveColor, unsigned int orientation)

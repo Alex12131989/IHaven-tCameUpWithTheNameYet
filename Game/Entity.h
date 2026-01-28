@@ -4,7 +4,10 @@
 class Entity
 {
 public:
+    virtual Rectangle GetBody() = 0;
     virtual void Spawn(Vector2 position) = 0;
+    virtual void Cooldown(int timeInMilliseconds) = 0;
+    virtual void Idle() = 0;
     virtual void Attack() = 0;
     virtual void Defend() = 0;
     virtual void ChangeSpeed(float rate) = 0;
@@ -25,5 +28,6 @@ private:
     unsigned int experiencePoints;
     bool idle;
     bool alive;
+    bool actionCooldown;
     Rectangle body;
 };
