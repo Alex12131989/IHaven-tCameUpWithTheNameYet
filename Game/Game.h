@@ -7,9 +7,7 @@
 #include <array>
 #include <cmath>
 
-#include "CONSTANTS.h"
 #include "KeysBound.h"
-#include "GenericFunctions.h"
 #include "Player.h"
 #include "Skeleton.h"
 #include "Object.h"
@@ -22,8 +20,10 @@ public:
     bool MainLoop();
     
 private:
-    //size
+    //sizes
     Vector2 screen = { 640, 360 };
+    Vector2 renderMap = { 32, 32 };
+    Vector2 tile = { 32, 32 };
 
     //other values
     Camera2D camera = { 0 };
@@ -42,14 +42,29 @@ private:
     std::array<Entity*, maxTrivialEnemies + maxSpecialEntities + 1> entities;
     std::array<Object*, maxRenderingObjects> objects;
      
-    
+    //arrays
     std::array<std::string, 4> welcoming_options{"Load Alias", "Start New", "Settings", "Exit"};
-    //std::array<Texture2D, 1> temp_textures;
     
+    //assets
+
+    //colors
+    Color* colorToTexture;
+    Color* renderMapColors;
+
+    //textures
+    char tileTypes = 4;
+    //0: dirt, 1: grass, 2: water, 3: sand
+    Color* tileColors;
+
+    std::array<Texture2D, TILEMAP_SIZE> grassTiles;
+    std::array<Texture2D, TILEMAP_SIZE> sandTiles;
+
     //methods
     void CheckKeysPressed();
     void CheckCollisions();
     void OpenMenu(std::vector<std::string> options, std::vector<Image> textures, Color primaryColor, Color secondaryColor, Color inactiveColor, unsigned int orientation);
     void LoadTextures();
     void LoadMap();
+    void UpdateWorld();
+    size_t ChooseCorrectTile(Vector2 targetPosition);
 };

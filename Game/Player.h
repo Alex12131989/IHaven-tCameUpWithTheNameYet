@@ -4,7 +4,6 @@
 #include <thread>
 
 #include "Entity.h"
-#include "CONSTANTS.h"
 #include "GenericFunctions.h"
 
 class Player : public Entity
@@ -45,12 +44,12 @@ public:
 private:
     enum Factions 
     {
-        Spaith,      //Spathi - sword (greek)                    
-        Dorirni,    //Dory - spear (greek),  eirini - peace (greek)
-        Pulee,      //Pouli - bird (greek)
-        Farfall,    //Farfalla - butterfly (italian)
-        Kreceed,    //Crecida - high water (spanish)
-        Aphreich    // Apfel - apple (german), reich (rich)
+        Spaith,  
+        Dorirni,
+        Pulee,
+        Farfall,
+        Kreceed,
+        Aphreich
     };
     unsigned int hp;
     unsigned int maxHp;

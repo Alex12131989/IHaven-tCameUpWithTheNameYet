@@ -1,6 +1,8 @@
 #pragma once
 //libraries
 #include <stdexcept>
+//temp
+#include <iostream>
 
 //operations
 #define	    CAST            0
@@ -15,3 +17,6 @@
 #define	    DOWNWARD        7
 #define	    HORIZONTAL      8
 #define	    VERTICAL        9
+
+//sizes
+#define     TILEMAP_SIZE   58

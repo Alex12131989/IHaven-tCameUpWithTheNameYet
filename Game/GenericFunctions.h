@@ -1,6 +1,6 @@
 #pragma once
 #include <cmath>
-#include <vector>
+#include <array>
 
 #include "CONSTANTS.h"
 
@@ -69,24 +69,71 @@ Image static LoadSprite(std::string address, Vector2 size)
     }
 }
 
-std::vector<Image> static DecomposeSprite(Image sprite, Vector2 singleImageSize)
+//void static DecomposeSprite(Image sprite, Vector2 singleImageSize, std::array<Image, 128>& frames)
+//{
+//    for (float i = 0; i < sprite.height; i += singleImageSize.y)
+//        for (float j = 0; j < sprite.width; j += singleImageSize.x)
+//        {
+//            Image frame = ImageFromImage(sprite, { static_cast<float>(i), static_cast<float>(j), singleImageSize.x, singleImageSize.y });
+//            frames[j] =frame;
+//        }
+//}
+void static DecomposeSprite(Image sprite, Vector2 singleImageSize, std::array<Image, TILEMAP_SIZE>& frames)
 {
-    std::vector<Image> frames;
+    size_t index = 0;
     for (float i = 0; i < sprite.height; i += singleImageSize.y)
         for (float j = 0; j < sprite.width; j += singleImageSize.x)
-        {
-            Image frame = ImageFromImage(sprite, { static_cast<float>(i), static_cast<float>(j), singleImageSize.x, singleImageSize.y });
-            frames.push_back(frame);
-        }
-    return frames;
+            if (!((i == 7*singleImageSize.y) && (j > 1*singleImageSize.x )))
+            {
+                Image frame = ImageFromImage(sprite, { static_cast<float>(j), static_cast<float>(i), singleImageSize.x, singleImageSize.y });
+                frames[index++] = frame;
+            }
 }
+//void static DecomposeSprite(Image sprite, Vector2 singleImageSize, std::array<Image, 32>& frames)
+//{
+//    for (float i = 0; i < sprite.height; i += singleImageSize.y)
+//        for (float j = 0; j < sprite.width; j += singleImageSize.x)
+//        {
+//            Image frame = ImageFromImage(sprite, { static_cast<float>(i), static_cast<float>(j), singleImageSize.x, singleImageSize.y });
+//            frames[j] =frame;
+//        }
+//}
 
-std::vector<Texture2D> static GetTextures(std::string address, Vector2 size, Vector2 induvidualTextureSize)
+//void static GetTextures(std::string address, Vector2 size, Vector2 induvidualTextureSize, std::array<Texture2D, 128>& textures)
+//{
+//    Image sprite = LoadSprite(address, size);
+//    std::array<Image, 128> frames;
+//    DecomposeSprite(sprite, induvidualTextureSize, frames);
+//    for (size_t i = 0; i < textures.size(); ++i)
+//        textures[i] = LoadTextureFromImage(frames[i]);
+//}
+void static GetTextures(std::string address, Vector2 size, Vector2 induvidualTextureSize, std::array<Texture2D, TILEMAP_SIZE>& textures)
 {
     Image sprite = LoadSprite(address, size);
-    std::vector<Image> frames = DecomposeSprite(sprite, induvidualTextureSize);
-    std::vector<Texture2D> textures;
-    for (Image frame : frames)
-        textures.push_back(LoadTextureFromImage(frame));
-    return textures;
+    std::array<Image, TILEMAP_SIZE> frames;
+    DecomposeSprite(sprite, induvidualTextureSize, frames);
+    for (size_t i = 0; i < textures.size(); ++i)
+        textures[i] = LoadTextureFromImage(frames[i]);
+}
+//void static GetTextures(std::string address, Vector2 size, Vector2 induvidualTextureSize, std::array<Texture2D, 32>& textures)
+//{
+//    Image sprite = LoadSprite(address, size);
+//    std::array<Image, 32> frames;
+//    DecomposeSprite(sprite, induvidualTextureSize, frames);
+//    for (size_t i = 0; i < textures.size(); ++i)
+//        textures[i] = LoadTextureFromImage(frames[i]);
+//}
+
+bool static operator==(const Color c1, const Color c2)
+{
+    if ((c1.r == c2.r) && (c1.g == c2.g) && (c1.b == c1.b) && (c1.a == c2.a))
+        return true;
+    return false;
+}
+
+bool static operator!=(const Color c1, const Color c2)
+{
+    if ((c1.r == c2.r) && (c1.g == c2.g) && (c1.b == c1.b) && (c1.a == c2.a))
+        return true;
+    return false;
 }
