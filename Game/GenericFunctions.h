@@ -21,6 +21,12 @@ int Int(T num, unsigned int round_option)
 	    throw std::invalid_argument("Wrong rounding option");
     }
 }
+template <typename T>
+int Int(T num)
+{
+    return static_cast<int>(num);
+}
+
 
 Color static EditColor(Color ogColor, float multiplicantR, float multiplicantG, float multiplicantB, float multiplicantA)
 {
@@ -32,7 +38,6 @@ Color static EditColor(Color ogColor, float multiplicantR, float multiplicantG, 
         static_cast<unsigned char>(ogColor.a*multiplicantA)
     };
 }
-
 Color static EditColor(Color ogColor, float multiplicant)
 {
     return
@@ -43,7 +48,6 @@ Color static EditColor(Color ogColor, float multiplicant)
          ogColor.a
     };
 }
-
 Color static ChangeColorOpacity(Color ogColor, float opacity)
 {
     if ((opacity <= 1) && (opacity >= 0))
@@ -69,15 +73,6 @@ Image static LoadSprite(std::string address, Vector2 size)
     }
 }
 
-//void static DecomposeSprite(Image sprite, Vector2 singleImageSize, std::array<Image, 128>& frames)
-//{
-//    for (float i = 0; i < sprite.height; i += singleImageSize.y)
-//        for (float j = 0; j < sprite.width; j += singleImageSize.x)
-//        {
-//            Image frame = ImageFromImage(sprite, { static_cast<float>(i), static_cast<float>(j), singleImageSize.x, singleImageSize.y });
-//            frames[j] =frame;
-//        }
-//}
 void static DecomposeSprite(Image sprite, Vector2 singleImageSize, std::array<Image, TILEMAP_SIZE>& frames)
 {
     size_t index = 0;
@@ -89,24 +84,7 @@ void static DecomposeSprite(Image sprite, Vector2 singleImageSize, std::array<Im
                 frames[index++] = frame;
             }
 }
-//void static DecomposeSprite(Image sprite, Vector2 singleImageSize, std::array<Image, 32>& frames)
-//{
-//    for (float i = 0; i < sprite.height; i += singleImageSize.y)
-//        for (float j = 0; j < sprite.width; j += singleImageSize.x)
-//        {
-//            Image frame = ImageFromImage(sprite, { static_cast<float>(i), static_cast<float>(j), singleImageSize.x, singleImageSize.y });
-//            frames[j] =frame;
-//        }
-//}
 
-//void static GetTextures(std::string address, Vector2 size, Vector2 induvidualTextureSize, std::array<Texture2D, 128>& textures)
-//{
-//    Image sprite = LoadSprite(address, size);
-//    std::array<Image, 128> frames;
-//    DecomposeSprite(sprite, induvidualTextureSize, frames);
-//    for (size_t i = 0; i < textures.size(); ++i)
-//        textures[i] = LoadTextureFromImage(frames[i]);
-//}
 void static GetTextures(std::string address, Vector2 size, Vector2 induvidualTextureSize, std::array<Texture2D, TILEMAP_SIZE>& textures)
 {
     Image sprite = LoadSprite(address, size);
@@ -115,14 +93,6 @@ void static GetTextures(std::string address, Vector2 size, Vector2 induvidualTex
     for (size_t i = 0; i < textures.size(); ++i)
         textures[i] = LoadTextureFromImage(frames[i]);
 }
-//void static GetTextures(std::string address, Vector2 size, Vector2 induvidualTextureSize, std::array<Texture2D, 32>& textures)
-//{
-//    Image sprite = LoadSprite(address, size);
-//    std::array<Image, 32> frames;
-//    DecomposeSprite(sprite, induvidualTextureSize, frames);
-//    for (size_t i = 0; i < textures.size(); ++i)
-//        textures[i] = LoadTextureFromImage(frames[i]);
-//}
 
 bool static operator==(const Color c1, const Color c2)
 {

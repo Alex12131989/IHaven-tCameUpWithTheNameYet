@@ -18,5 +18,9 @@
 #define	    HORIZONTAL      8
 #define	    VERTICAL        9
 
+//focus
+#define     BACKGROUND      10
+#define     FOREGROUND      11
+
 //sizes
 #define     TILEMAP_SIZE   58

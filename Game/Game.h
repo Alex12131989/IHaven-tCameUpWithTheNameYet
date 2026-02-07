@@ -20,6 +20,16 @@ public:
     bool MainLoop();
     
 private:
+    //methods
+    void CheckKeysPressed();
+    void CheckCollisions();
+    void OpenMenu(std::vector<std::string> options, std::vector<Image> textures, Color primaryColor, Color secondaryColor, Color inactiveColor, unsigned int orientation);
+    void LoadTextures();
+    void LoadMap();
+    void UpdateWorld();
+    std::array<char, 2> ChooseCorrectTile(Vector2 targetPosition, char focus);//orientation_type, material_type
+    void DrawTile(Vector2 targetPosition, char focus);
+
     //sizes
     Vector2 screen = { 640, 360 };
     Vector2 renderMap = { 32, 32 };
@@ -46,6 +56,7 @@ private:
     std::array<std::string, 4> welcoming_options{"Load Alias", "Start New", "Settings", "Exit"};
     
     //assets
+    Image wholePhysicalMapImage;
 
     //colors
     Color* colorToTexture;
@@ -56,15 +67,7 @@ private:
     //0: dirt, 1: grass, 2: water, 3: sand
     Color* tileColors;
 
+    Texture2D wholePhysicalMap;
     std::array<Texture2D, TILEMAP_SIZE> grassTiles;
     std::array<Texture2D, TILEMAP_SIZE> sandTiles;
-
-    //methods
-    void CheckKeysPressed();
-    void CheckCollisions();
-    void OpenMenu(std::vector<std::string> options, std::vector<Image> textures, Color primaryColor, Color secondaryColor, Color inactiveColor, unsigned int orientation);
-    void LoadTextures();
-    void LoadMap();
-    void UpdateWorld();
-    size_t ChooseCorrectTile(Vector2 targetPosition);
 };
